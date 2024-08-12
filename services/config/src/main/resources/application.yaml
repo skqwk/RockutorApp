@@ -6,7 +6,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/skqwk/RockutorConfig
+          uri: https://github.com/skqwk/RockutorAppConfig
           skipSslValidation: true
 
 # Kubernetes readiness/liveness probes
