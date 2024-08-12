@@ -1,0 +1,123 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: editor-app-autoscale
+  name: editor-app-hpa
+  namespace: default
+spec:
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: editor-app
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 30
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: editor-app
+  name: editor-app
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: editor-app
+  template:
+    metadata:
+      labels:
+        app: editor-app
+    spec:
+      containers:
+        - image: editor-app
+          imagePullPolicy: Never
+          name: editor-app
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: editor-db-config
+                  key: postgres_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: editor-db-config
+                  key: postgres_password
+            - name: CONFIG_APP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: config-app-config
+                  key: config_host
+            - name: CONFIG_APP_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-app-config
+                  key: config_port
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: config-app-config
+                  key: config_profile
+            - name: CONFIG_URL
+              value: "http://$(CONFIG_APP_NAME):$(CONFIG_APP_PORT)"
+            - name: OTEL_SERVICE_NAME
+              value: editor-app
+            - name: OTEL_METRICS_EXPORTER
+              value: none
+            - name: JAEGER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: host-name
+                  name: jaeger-config
+            - name: OTEL_TRACES_EXPORTER
+              value: "$(JAEGER_NAME)"
+            - name: JAEGER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: port
+                  name: jaeger-config
+            - name: OTEL_EXPORTER_JAEGER_ENDPOINT
+              value: "http://$(JAEGER_NAME):$(JAEGER_PORT)"
+          resources:
+            requests:
+              cpu: 100m
+          ports:
+            - containerPort: 8081
+          readinessProbe:
+            httpGet:
+              port: 8081
+              path: /actuator/health/readiness
+            initialDelaySeconds: 20
+            timeoutSeconds: 10
+          livenessProbe:
+            httpGet:
+              port: 8081
+              path: /actuator/health/liveness
+            initialDelaySeconds: 20
+            timeoutSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: editor-app
+  name: editor-app
+  namespace: default
+spec:
+  ports:
+    - port: 8081
+      protocol: TCP
+      targetPort: 8081
+  selector:
+    app: editor-app
+  type: ClusterIP
