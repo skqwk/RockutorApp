@@ -1,0 +1,7 @@
+apiVersion: v2
+name: db-exporter
+description: Чарт Helm для развертывания экспортеров БД
+
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
