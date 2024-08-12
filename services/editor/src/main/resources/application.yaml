@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: editor
+  config:
+    import: optional:configserver:${CONFIG_URL:http://localhost:8888}
+
+kafka:
+  enabled: false
