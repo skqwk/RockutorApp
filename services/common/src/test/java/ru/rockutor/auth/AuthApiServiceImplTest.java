@@ -44,8 +44,7 @@ class AuthApiServiceImplTest {
         // THEN
         System.out.println(tokenVerifyRs.userData().username());
         System.out.println(tokenVerifyRs.userData().role());
-        System.out.println(tokenVerifyRs.message());
-        System.out.println(tokenVerifyRs.status());
+        System.out.println(tokenVerifyRs.success());
     }
 
     static void refresh() {
@@ -58,7 +57,6 @@ class AuthApiServiceImplTest {
         // THEN
         System.out.println(tokenRs.refreshToken());
         System.out.println(tokenRs.accessToken());
-        System.out.println(tokenRs.tokenType());
     }
 
     private static <T> T getFromResponse(String fieldName) {

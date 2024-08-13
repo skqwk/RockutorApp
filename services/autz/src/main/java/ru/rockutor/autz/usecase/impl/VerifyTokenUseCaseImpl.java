@@ -36,8 +36,7 @@ public class VerifyTokenUseCaseImpl implements VerifyTokenUseCase {
 
     private TokenVerifyRs createTokenVerifyRs(UserData userData) {
         return new TokenVerifyRs(
-                "success",
-                "Verified",
+                true,
                 userData
         );
     }

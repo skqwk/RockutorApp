@@ -3,25 +3,15 @@ package ru.rockutor.autz.usecase.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.rockutor.auth.dto.TokenRs;
 import ru.rockutor.auth.dto.UserData;
 import ru.rockutor.autz.config.JwtConfig;
-import ru.rockutor.autz.controller.dto.LoginRq;
-import ru.rockutor.autz.domain.User;
-import ru.rockutor.autz.exception.InvalidPasswordException;
-import ru.rockutor.autz.exception.UserNotFoundException;
-import ru.rockutor.autz.repo.UserRepo;
 import ru.rockutor.autz.usecase.CreateTokenUseCase;
 import ru.rockutor.autz.util.JwtTokenUtil;
 
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-
-import static ru.rockutor.autz.util.Validator.validateUsername;
 
 @Component
 @RequiredArgsConstructor
@@ -42,7 +32,7 @@ public class CreateTokenUseCaseImpl implements CreateTokenUseCase {
         redisTemplate.opsForValue()
                 .set(user.username(), serialize(user), refreshTokenExp, TimeUnit.MINUTES);
 
-        return new TokenRs(accessToken, refreshToken, null);
+        return new TokenRs(accessToken, refreshToken);
     }
 
     private String serialize(UserData userData)  {

@@ -15,7 +15,7 @@ public class AccessTokenVerifierImpl implements AccessTokenVerifier {
     public AuthResult<TokenVerifyRs> verify(String accessToken) {
         try {
             TokenVerifyRs tokenVerifyRs = authApiService.verify(accessToken);
-            if (tokenVerifyRs.isSuccess()) {
+            if (tokenVerifyRs.success()) {
                 log.info("Токен доступа верифицирован");
                 return AuthResult.authenticated(tokenVerifyRs);
             }

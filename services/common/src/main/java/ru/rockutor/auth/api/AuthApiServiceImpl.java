@@ -8,7 +8,6 @@ import ru.rockutor.auth.dto.TokenRs;
 import ru.rockutor.auth.dto.TokenVerifyRs;
 
 import java.util.Collections;
-import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,29 +21,29 @@ public class AuthApiServiceImpl implements AuthApiService {
 
     @Override
     public TokenVerifyRs verify(String accessToken) {
-        ResponseEntity<Map> response = restTemplate.postForEntity(
+        ResponseEntity<TokenVerifyRs> response = restTemplate.postForEntity(
                 getUrl(VERIFY),
                 null,
-                Map.class,
+                TokenVerifyRs.class,
                 Collections.singletonMap(TOKEN, accessToken)
         );
         
         log.info("Получен ответ с кодом [{}] от /auth/verify", response.getStatusCode().value());
         
-        return TokenVerifyRsConverter.fromMap(response.getBody());
+        return response.getBody();
     }
 
     @Override
     public TokenRs refresh(String refreshToken) {
-        ResponseEntity<Map> response = restTemplate.postForEntity(
+        ResponseEntity<TokenRs> response = restTemplate.postForEntity(
                 getUrl(REFRESH),
                 null,
-                Map.class,
+                TokenRs.class,
                 Collections.singletonMap(TOKEN, refreshToken));
 
         log.info("Получен ответ с кодом [{}] от /auth/refresh", response.getStatusCode().value());
 
-        return TokenRsConverter.fromMap(response.getBody());
+        return response.getBody();
     }
 
     private String getUrl(String endpoint) {

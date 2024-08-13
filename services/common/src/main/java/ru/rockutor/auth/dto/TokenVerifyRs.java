@@ -1,9 +1,5 @@
 package ru.rockutor.auth.dto;
 
-public record TokenVerifyRs(String status,
-                            String message,
+public record TokenVerifyRs(boolean success,
                             UserData userData) {
-    public boolean isSuccess() {
-        return "success".equals(status);
-    }
 }
