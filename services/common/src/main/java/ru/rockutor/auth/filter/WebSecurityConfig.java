@@ -1,5 +1,6 @@
 package ru.rockutor.auth.filter;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -22,6 +23,7 @@ import ru.rockutor.auth.filter.token.filter.TokenFilter;
 
 @Configuration
 @EnableWebSecurity
+@ConditionalOnProperty(value = "security.enabled", havingValue = "true")
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
     @Bean

@@ -1,5 +1,25 @@
 version: "3.9"
 services:
+  autz-db:
+    image: ${POSTGRES_IMAGE}
+    container_name: ${AUTZ_DB_HOST}
+    environment:
+      - POSTGRES_USER=${AUTZ_DB_USER}
+      - POSTGRES_PASSWORD=${AUTZ_DB_PASSWORD}
+      - POSTGRES_DB=${AUTZ_DB_NAME}
+    command: postgres -p ${DATABASE_PORT}
+    networks:
+      - rockutor
+    ports:
+      - ${AUTZ_DB_EXT_PORT}:${DATABASE_PORT}
+    volumes:
+      - ./autz-db:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   editor-db:
     image: ${POSTGRES_IMAGE}
     container_name: ${EDITOR_DB_HOST}

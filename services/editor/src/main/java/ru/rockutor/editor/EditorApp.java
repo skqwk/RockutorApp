@@ -13,9 +13,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
         org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration.class
 })
 public class EditorApp {
-
     public static void main(String[] args) {
         SpringApplication.run(EditorApp.class, args);
     }
-
 }
