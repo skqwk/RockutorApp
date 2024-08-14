@@ -33,12 +33,12 @@ kubectl delete deployment monitoring-db-prometheus
 
 Включить всё
 ```bash
-cd k8s/auth
-kubectl apply -f auth-app.yaml
-kubectl apply -f auth-db.yaml
-kubectl apply -f auth-redis.yaml
-cd ../config
+cd k8s/config
 kubectl apply -f config-app.yaml
+cd ../autz
+kubectl apply -f autz-db.yaml
+kubectl apply -f autz-redis.yaml
+kubectl apply -f autz-app.yaml
 cd ../kafka
 kubectl apply -f kafka.yaml
 cd ../jaeger
@@ -54,8 +54,8 @@ kubectl apply -f krakend.yaml
 cd ../graylog
 kubectl apply -f graylog.yaml
 cd ../monitoring
-kubectl apply -f auth-db-exporter.yml
-kubectl apply -f auth-redis-exporter.yml
+kubectl apply -f autz-db-exporter.yml
+kubectl apply -f autz-redis-exporter.yml
 kubectl apply -f signer-db-exporter.yml
 kubectl apply -f editor-db-exporter.yml
 kubectl apply -f prometheus-deploy.yml

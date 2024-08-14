@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autz-db-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: autz-db-exporter
+  template:
+    metadata:
+      labels:
+        app: autz-db-exporter
+    spec:
+      containers:
+        - name: autz-db-exporter
+          image: prometheuscommunity/postgres-exporter:v0.10.0
+          ports:
+            - containerPort: 9187
+          env:
+            - name: DATA_SOURCE_NAME
+              value: "postgresql://autz:autz@autz-db:5432/autz-db?sslmode=disable"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: autz-db-exporter
+spec:
+  selector:
+    app: autz-db-exporter
+  ports:
+    - name: http
+      protocol: TCP
+      port: 9187
+      targetPort: 9187

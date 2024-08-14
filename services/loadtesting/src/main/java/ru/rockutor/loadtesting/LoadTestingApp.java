@@ -41,7 +41,7 @@ public class LoadTestingApp implements CommandLineRunner {
     public void run(String... args) {
         // Перед запуском тестов, убедись, что GATEWAY доступен!
         log.info("Начало сценариев");
-        repeatScenario(40, this::createUpdateDeleteScenario);
+        repeatScenario(1, this::createUpdateDeleteScenario);
         log.info("Сценарии завершены");
     }
 

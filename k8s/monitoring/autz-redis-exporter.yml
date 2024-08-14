@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-redis-exporter
+  name: autz-redis-exporter
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth-redis-exporter
+      app: autz-redis-exporter
   template:
     metadata:
       labels:
-        app: auth-redis-exporter
+        app: autz-redis-exporter
     spec:
       containers:
-        - name: auth-redis-exporter
+        - name: autz-redis-exporter
           image: oliver006/redis_exporter:latest
           ports:
             - containerPort: 9121
           env:
             - name: REDIS_ADDR
-              value: auth-redis:6379
+              value: autz-redis:6379
           livenessProbe:
             httpGet:
               path: /metrics
@@ -43,10 +43,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-redis-exporter
+  name: autz-redis-exporter
 spec:
   selector:
-    app: auth-redis-exporter
+    app: autz-redis-exporter
   ports:
     - name: http
       protocol: TCP

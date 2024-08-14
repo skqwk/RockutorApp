@@ -17,7 +17,7 @@
         <java.version>17</java.version>
         <spring-cloud-version>2022.0.4</spring-cloud-version>
         <jwt.version>0.11.5</jwt.version>
-        <jedis.version>5.0.0</jedis.version>
+        <jedis.version>4.3.2</jedis.version>
     </properties>
     <dependencies>
         <dependency>

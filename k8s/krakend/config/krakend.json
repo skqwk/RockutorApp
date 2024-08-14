@@ -217,7 +217,7 @@
           "sd": "static",
           "method": "POST",
           "host": [
-            "{{ $.env.auth_host }}"
+            "{{ $.env.autz_host }}"
           ],
           "disable_host_sanitize": false
         }
@@ -235,7 +235,7 @@
           "sd": "static",
           "method": "POST",
           "host": [
-            "{{ $.env.auth_host }}"
+            "{{ $.env.autz_host }}"
           ],
           "disable_host_sanitize": false
         }

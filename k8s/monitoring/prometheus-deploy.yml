@@ -14,18 +14,18 @@ data:
       - job_name: prometheus
         static_configs:
           - targets: ["localhost:9090"]
-      - job_name: auth-db-exporter
+      - job_name: autz-db-exporter
         static_configs:
-          - targets: ["auth-db-exporter:9187"]
+          - targets: ["autz-db-exporter:9187"]
       - job_name: editor-db-exporter
         static_configs:
           - targets: [ "editor-db-exporter:9187" ]
       - job_name: signer-db-exporter
         static_configs:
           - targets: [ "signer-db-exporter:9187" ]
-      - job_name: auth-redis-exporter
+      - job_name: autz-redis-exporter
         static_configs:
-          - targets: ["auth-redis-exporter:9121" ]
+          - targets: ["autz-redis-exporter:9121" ]
 ---
 apiVersion: apps/v1
 kind: Deployment
