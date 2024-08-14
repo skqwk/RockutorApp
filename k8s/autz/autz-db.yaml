@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: autz-db-config
+  namespace: default
+data:
+  postgres_user: 'autz'
+  postgres_password: 'autz'
+  postgres_db: 'autz-db'
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: max-connections
+  namespace: default
+data:
+  max-connections.sql: "ALTER SYSTEM SET max_connections = 500;"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: autz-db-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autz-db
+spec:
+  selector:
+    matchLabels:
+      app: autz-db
+  template:
+    metadata:
+      labels:
+        app: autz-db
+    spec:
+      volumes:
+        - name: autz-db-storage
+          persistentVolumeClaim:
+            claimName: autz-db-pv-claim
+        - name: max-connections
+          configMap:
+            name: max-connections
+      containers:
+        - image: postgres:15
+          name: autz-db
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: autz-db-config
+                  key: postgres_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: autz-db-config
+                  key: postgres_password
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: autz-db-config
+                  key: postgres_db
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - containerPort: 5432
+              name: autz-db
+          readinessProbe:
+            exec:
+              command: [
+                'psql', 'autz',
+                '-U', 'autz',
+                '-d', 'autz-db',
+                '-c', 'SELECT 1'
+              ]
+            initialDelaySeconds: 15
+            timeoutSeconds: 2
+          volumeMounts:
+            - name: autz-db-storage
+              mountPath: /var/lib/postgresql/data
+            - name: max-connections
+              mountPath: /docker-entrypoint-initdb.d
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: autz-db
+  name: autz-db
+  namespace: default
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    app: autz-db
