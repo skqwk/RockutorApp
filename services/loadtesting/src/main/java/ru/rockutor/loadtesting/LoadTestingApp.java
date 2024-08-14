@@ -15,6 +15,9 @@ import java.util.stream.Stream;
 @Slf4j
 @SpringBootApplication
 public class LoadTestingApp implements CommandLineRunner {
+    private static final User EDITOR = new User("employee", "q1w2e3r4t5");
+    private static final User SIGNER = new User("inspector", "q1w2e3r4t5");
+
     public static void main(String[] args) {
         SpringApplication.run(LoadTestingApp.class, args);
     }
@@ -41,7 +44,7 @@ public class LoadTestingApp implements CommandLineRunner {
     public void run(String... args) {
         // Перед запуском тестов, убедись, что GATEWAY доступен!
         log.info("Начало сценариев");
-        repeatScenario(1, this::createUpdateDeleteScenario);
+        repeatScenario(10, this::createUpdateDeleteScenario);
         log.info("Сценарии завершены");
     }
 
@@ -59,8 +62,7 @@ public class LoadTestingApp implements CommandLineRunner {
 
     private void createUpdateScenario() {
         // 1. Авторизоваться, получить токен
-        User user = new User("editor", "editor");
-        EditorClient client = new EditorClient(user, GATEWAY);
+        EditorClient client = new EditorClient(EDITOR, GATEWAY);
 
         // 2. Создать документ
         UUID documentId = client.createDocument();
@@ -79,8 +81,7 @@ public class LoadTestingApp implements CommandLineRunner {
 
     private void signDocuments() {
         // 1. Авторизоваться,
-        User signer = new User("signer", "signer");
-        SignerClient signerClient = new SignerClient(signer, GATEWAY);
+        SignerClient signerClient = new SignerClient(SIGNER, GATEWAY);
 
         // 2. Получить запросы
         List<UUID> requests = signerClient.getSigningRequests();
@@ -91,8 +92,7 @@ public class LoadTestingApp implements CommandLineRunner {
 
     private void createAndSendForSigning() {
         // 1. Авторизоваться
-        User editor = new User("editor", "editor");
-        EditorClient editorClient = new EditorClient(editor, GATEWAY);
+        EditorClient editorClient = new EditorClient(EDITOR, GATEWAY);
 
         // 2. Создать документ
         UUID documentId = editorClient.createDocument();
@@ -103,8 +103,7 @@ public class LoadTestingApp implements CommandLineRunner {
 
     private void createSignScenario() {
         // 1. Авторизоваться
-        User editor = new User("editor", "editor");
-        EditorClient editorClient = new EditorClient(editor, GATEWAY);
+        EditorClient editorClient = new EditorClient(EDITOR, GATEWAY);
 
         // 2. Создать документ
         UUID documentId = editorClient.createDocument();
@@ -116,8 +115,7 @@ public class LoadTestingApp implements CommandLineRunner {
         sleep(2000);
 
         // 5. Подписать
-        User signer = new User("signer", "signer");
-        SignerClient signerClient = new SignerClient(signer, GATEWAY);
+        SignerClient signerClient = new SignerClient(SIGNER, GATEWAY);
 
         signerClient.signDocumentByDocumentId(documentId);
     }
@@ -125,8 +123,7 @@ public class LoadTestingApp implements CommandLineRunner {
 
     private void createUpdateDeleteScenario() {
         // 1. Авторизоваться, получить токен
-        User user = new User("editor", "editor");
-        EditorClient client = new EditorClient(user, GATEWAY);
+        EditorClient client = new EditorClient(EDITOR, GATEWAY);
 
         // 2. Создать документ
         UUID documentId = client.createDocument();

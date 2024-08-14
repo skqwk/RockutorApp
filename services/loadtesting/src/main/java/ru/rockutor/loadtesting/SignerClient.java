@@ -79,8 +79,8 @@ public class SignerClient {
         Map<?, ?> response = restTemplate.postForEntity(getUrl(TOKEN), user, Map.class)
                 .getBody();
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.set("AccessToken", response.get("access_token").toString());
-        headers.set("RefreshToken", response.get("refresh_token").toString());
+        headers.set("AccessToken", response.get("accessToken").toString());
+        headers.set("RefreshToken", response.get("refreshToken").toString());
 
         return headers;
     }
