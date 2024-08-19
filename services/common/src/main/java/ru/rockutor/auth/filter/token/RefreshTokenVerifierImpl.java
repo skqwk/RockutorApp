@@ -2,7 +2,6 @@ package ru.rockutor.auth.filter.token;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import ru.rockutor.auth.AuthResult;
 import ru.rockutor.auth.api.AuthApiService;
 import ru.rockutor.auth.dto.TokenRs;

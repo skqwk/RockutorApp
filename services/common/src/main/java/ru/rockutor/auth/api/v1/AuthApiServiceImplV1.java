@@ -1,9 +1,10 @@
-package ru.rockutor.auth.api;
+package ru.rockutor.auth.api.v1;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import ru.rockutor.auth.api.AuthApiService;
 import ru.rockutor.auth.dto.TokenRs;
 import ru.rockutor.auth.dto.TokenVerifyRs;
 
@@ -11,7 +12,7 @@ import java.util.Collections;
 
 @Slf4j
 @RequiredArgsConstructor
-public class AuthApiServiceImpl implements AuthApiService {
+public class AuthApiServiceImplV1 implements AuthApiService {
     private static final String VERIFY = "/verify?token={token}";
     private static final String REFRESH = "/refresh?refresh_token={token}";
     private static final String TOKEN = "token";

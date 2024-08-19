@@ -1,3 +1,4 @@
-ru.rockutor.auth.api.AuthApiConfig
-ru.rockutor.auth.api.AuthDataConfig
+ru.rockutor.auth.api.v1.AuthApiConfig
+ru.rockutor.auth.api.v1.AuthDataConfig
+ru.rockutor.auth.api.v2.AuthClientConfig
 ru.rockutor.auth.filter.WebSecurityConfig

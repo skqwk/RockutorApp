@@ -3,7 +3,7 @@ package ru.rockutor.auth;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.client.RestTemplate;
-import ru.rockutor.auth.api.AuthApiServiceImpl;
+import ru.rockutor.auth.api.v1.AuthApiServiceImplV1;
 import ru.rockutor.auth.dto.TokenRs;
 import ru.rockutor.auth.dto.TokenVerifyRs;
 
@@ -22,8 +22,8 @@ class AuthApiServiceImplTest {
                         """;
 
     private static final String AUTH_URL = "http://localhost:8012";
-    private static final AuthApiServiceImpl authApiService =
-            new AuthApiServiceImpl(new RestTemplate(), AUTH_URL);
+    private static final AuthApiServiceImplV1 authApiService =
+            new AuthApiServiceImplV1(new RestTemplate(), AUTH_URL);
 
 
     public static void main(String[] args) {

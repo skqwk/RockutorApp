@@ -4,7 +4,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
+import org.springframework.util.StringUtils;
 import ru.rockutor.auth.AuthResult;
 import ru.rockutor.auth.dto.TokenRs;
 import ru.rockutor.auth.dto.TokenVerifyRs;
@@ -12,6 +14,7 @@ import ru.rockutor.auth.dto.UserData;
 import ru.rockutor.auth.filter.token.AccessTokenVerifier;
 import ru.rockutor.auth.filter.token.RefreshTokenVerifier;
 
+@Slf4j
 @RequiredArgsConstructor
 public abstract class RefreshTokenFilter implements TokenFilter {
     private final AccessTokenVerifier accessTokenVerifier;
@@ -21,6 +24,10 @@ public abstract class RefreshTokenFilter implements TokenFilter {
     public UserData process(HttpServletRequest request,
                             @NonNull HttpServletResponse response) {
         String refreshToken = getRefreshToken(request);
+        if (refreshToken == null) {
+            log.warn("{} получил пустой токен", this.getClass().getSimpleName());
+            return null;
+        }
 
         AuthResult<TokenRs> refreshResult = refreshTokenVerifier.refresh(refreshToken);
         if (refreshResult.isRefreshExpired()) {

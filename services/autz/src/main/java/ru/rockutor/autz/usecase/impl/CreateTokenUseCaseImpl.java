@@ -3,6 +3,7 @@ package ru.rockutor.autz.usecase.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import ru.rockutor.auth.dto.TokenRs;
@@ -13,6 +14,7 @@ import ru.rockutor.autz.util.JwtTokenUtil;
 
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CreateTokenUseCaseImpl implements CreateTokenUseCase {
@@ -23,6 +25,8 @@ public class CreateTokenUseCaseImpl implements CreateTokenUseCase {
 
     @Override
     public TokenRs createToken(UserData user) {
+        log.info("Создание токена для - {}", user.username());
+
         Integer accessTokenExp = jwtConfig.getAccessTokenExpirationInMinutes();
         String accessToken = jwtTokenUtil.generateToken(user.username(), accessTokenExp);
 

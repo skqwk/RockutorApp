@@ -1,4 +1,4 @@
-package ru.rockutor.auth.api;
+package ru.rockutor.auth.api.v1;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

@@ -2,6 +2,7 @@ package ru.rockutor.autz.usecase.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import ru.rockutor.auth.dto.TokenVerifyRs;
@@ -11,6 +12,7 @@ import ru.rockutor.autz.util.JwtTokenUtil;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class VerifyTokenUseCaseImpl implements VerifyTokenUseCase {
@@ -21,6 +23,7 @@ public class VerifyTokenUseCaseImpl implements VerifyTokenUseCase {
     @Override
     public TokenVerifyRs verify(String token) {
         String username = jwtTokenUtil.getUsernameFromToken(token);
+        log.info("Верификация токена для - {}", username);
         String dumped = redisTemplate.opsForValue().get(username);
         UserData userData = deserialized(dumped);
         return createTokenVerifyRs(userData);
