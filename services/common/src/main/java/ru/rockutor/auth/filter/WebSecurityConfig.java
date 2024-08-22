@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.rockutor.auth.api.AuthApiService;
+import ru.rockutor.auth.AuthService;
 import ru.rockutor.auth.filter.token.AccessTokenVerifier;
 import ru.rockutor.auth.filter.token.AccessTokenVerifierImpl;
 import ru.rockutor.auth.filter.token.RefreshTokenVerifier;
@@ -97,12 +97,12 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AccessTokenVerifier accessTokenVerifier(AuthApiService authApiService) {
-        return new AccessTokenVerifierImpl(authApiService);
+    public AccessTokenVerifier accessTokenVerifier(AuthService authService) {
+        return new AccessTokenVerifierImpl(authService);
     }
 
     @Bean
-    public RefreshTokenVerifier refreshTokenVerifier(AuthApiService authApiService) {
-        return new RefreshTokenVerifierImpl(authApiService);
+    public RefreshTokenVerifier refreshTokenVerifier(AuthService authService) {
+        return new RefreshTokenVerifierImpl(authService);
     }
 }
